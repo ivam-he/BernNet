@@ -34,18 +34,18 @@ class Bern_prop(MessagePassing):
         tmp=[]
         tmp.append(x)
         for i in range(self.K):
-        	x=self.propagate(edge_index2,x=x,norm=norm2,size=None)
-        	tmp.append(x)
+            x=self.propagate(edge_index2,x=x,norm=norm2,size=None)
+            tmp.append(x)
 
         out=(comb(self.K,0)/(2**self.K))*TEMP[0]*tmp[self.K]
 
         for i in range(self.K):
-        	x=tmp[self.K-i-1]
-        	x=self.propagate(edge_index1,x=x,norm=norm1,size=None)
-        	for j in range(i):
-        		x=self.propagate(edge_index1,x=x,norm=norm1,size=None)
+            x=tmp[self.K-i-1]
+            x=self.propagate(edge_index1,x=x,norm=norm1,size=None)
+            for j in range(i):
+                x=self.propagate(edge_index1,x=x,norm=norm1,size=None)
 
-        	out=out+(comb(self.K,i+1)/(2**self.K))*TEMP[i+1]*x
+            out=out+(comb(self.K,i+1)/(2**self.K))*TEMP[i+1]*x
         return out
     def message(self, x_j, norm):
         return norm.view(-1, 1) * x_j
